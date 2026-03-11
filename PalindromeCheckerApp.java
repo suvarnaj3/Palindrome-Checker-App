@@ -11,7 +11,7 @@ import java.util.Deque;
  * This class measures and compares the execution
  * performance of palindrome validation algorithms.
  * 
- * @author Garv
+ * @author developer
  * @version 13.0
  */
 public class PalindromeCheckerApp {
