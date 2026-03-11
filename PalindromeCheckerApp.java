@@ -1,44 +1,48 @@
 import java.util.Scanner;
 
-/**
- * MAIN CLASS - UseCase10PalindromeCheckerApp
- * 
- * Use Case 10: Normalized Palindrome Validation
- * 
- * Description:
- * This class validates a palindrome after preprocessing the input string.
- * Normalization includes:
- * - Removing spaces and symbols
- * - Converting to lowercase
- * 
- * @author Developer
- * @version 10.0
- */
+
+class PalindromeChecker {
+    
+
+    public boolean checkPalindrome(String input) {
+        if (input == null || input.isEmpty()) {
+            return false;
+        }
+
+        String normalized = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        
+        int left = 0;
+        int right = normalized.length() - 1;
+
+        while (left < right) {
+            if (normalized.charAt(left) != normalized.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
+
+
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        
+        PalindromeChecker service = new PalindromeChecker();
 
-        System.out.println("--- UC10: Case-Insensitive & Space-Ignored Palindrome ---");
-        System.out.print("Enter string: ");
-        String input = scanner.nextLine();
+        System.out.println("--- UC11: Object-Oriented Palindrome Service ---");
+        System.out.print("Enter text to validate: ");
+        String userInput = scanner.nextLine();
 
+        boolean result = service.checkPalindrome(userInput);
 
-        String normalized = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-
-        boolean isPalindrome = true;
-
-        for (int i = 0; i < normalized.length() / 2; i++) {
-            if (normalized.charAt(i) != normalized.charAt(normalized.length() - 1 - i)) {
-                isPalindrome = false;
-                break;
-            }
-        }
-
-        if (isPalindrome && !normalized.isEmpty()) {
-            System.out.println("Result: \"" + input + "\" is a valid normalized palindrome.");
+        if (result) {
+            System.out.println("SUCCESS: The input is a valid palindrome.");
         } else {
-            System.out.println("Result: \"" + input + "\" is NOT a palindrome.");
+            System.out.println("FAILURE: The input is not a palindrome.");
         }
 
         scanner.close();
