@@ -3,28 +3,46 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 /**
- * MAIN CLASS - UseCase12PalindromeCheckerApp
- * Use Case 12: Strategy Pattern for Palindrome Algorithms
- * Description: Demonstrates how different palindrome validation algorithms 
- * can be selected dynamically at runtime using the Strategy Design Pattern.
+ * MAIN CLASS - UseCase13PalindromeCheckerApp
+ * 
+ * Use Case 13: Performance Comparison
+ * 
+ * Description:
+ * This class measures and compares the execution
+ * performance of palindrome validation algorithms.
  * 
  * @author Garv
- * @version 12.0
+ * @version 13.0
  */
 public class PalindromeCheckerApp {
 
-    public static void main(String[] args) {
-        String testInput = "madam";
 
+    public static void main(String[] args) {
+        String testInput = "racecar".repeat(1000);
+        
         PalindromeContext checker = new PalindromeContext();
 
-        System.out.println("Testing with Input: " + testInput);
+        System.out.println("Palindrome Algorithm Performance Benchmarking");
+        System.out.println("Input Size: " + testInput.length() + " characters\n");
 
         checker.setStrategy(new StackStrategy());
-        System.out.println("Using Stack Strategy: " + checker.check(testInput));
+        benchmark(checker, "Stack-Based Strategy", testInput);
 
         checker.setStrategy(new DequeStrategy());
-        System.out.println("Using Deque Strategy: " + checker.check(testInput));
+        benchmark(checker, "Deque-Based Strategy", testInput);
+    }
+
+
+    private static void benchmark(PalindromeContext context, String name, String input) {
+        long startTime = System.nanoTime();
+        boolean result = context.check(input);
+        long endTime = System.nanoTime();
+        
+        long duration = endTime - startTime;
+
+        System.out.println("Algorithm: " + name);
+        System.out.println("Is Palindrome: " + result);
+        System.out.println("Execution Time: " + duration + " nanoseconds");
     }
 }
 
@@ -37,19 +55,15 @@ interface PalindromeStrategy {
 class StackStrategy implements PalindromeStrategy {
     @Override
     public boolean isPalindrome(String input) {
-        String clean = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
         Stack<Character> stack = new Stack<>();
-        
-        for (char c : clean.toCharArray()) {
+        for (char c : input.toCharArray()) {
             stack.push(c);
         }
-        
         StringBuilder reversed = new StringBuilder();
         while (!stack.isEmpty()) {
             reversed.append(stack.pop());
         }
-        
-        return clean.equals(reversed.toString());
+        return input.equals(reversed.toString());
     }
 }
 
@@ -57,13 +71,10 @@ class StackStrategy implements PalindromeStrategy {
 class DequeStrategy implements PalindromeStrategy {
     @Override
     public boolean isPalindrome(String input) {
-        String clean = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
         Deque<Character> deque = new ArrayDeque<>();
-        
-        for (char c : clean.toCharArray()) {
+        for (char c : input.toCharArray()) {
             deque.addLast(c);
         }
-        
         while (deque.size() > 1) {
             if (!deque.removeFirst().equals(deque.removeLast())) {
                 return false;
@@ -82,9 +93,7 @@ class PalindromeContext {
     }
 
     public boolean check(String text) {
-        if (strategy == null) {
-            throw new IllegalStateException("Strategy not set!");
-        }
+        if (strategy == null) return false;
         return strategy.isPalindrome(text);
     }
 }
