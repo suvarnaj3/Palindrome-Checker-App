@@ -1,55 +1,46 @@
 import java.util.Scanner;
 
 /**
- * MAIN CLASS - UseCase9RecursivePalindrome
+ * MAIN CLASS - UseCase10PalindromeCheckerApp
  * 
- * Use Case 9: Recursive Palindrome Checker
+ * Use Case 10: Normalized Palindrome Validation
  * 
  * Description:
- * This class validates a palindrome using recursion.
- * Characters are compared from the outer positions
- * moving inward using recursive calls.
- * 
- * The recursion stops when:
- * - All characters are matched, or
- * - A mismatch is found.
+ * This class validates a palindrome after preprocessing the input string.
+ * Normalization includes:
+ * - Removing spaces and symbols
+ * - Converting to lowercase
  * 
  * @author Developer
- * @version 9.0
+ * @version 10.0
  */
 public class PalindromeCheckerApp {
-
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("--- UC9: Recursive Palindrome Checker ---");
-        System.out.print("Enter a string to check: ");
+        System.out.println("--- UC10: Case-Insensitive & Space-Ignored Palindrome ---");
+        System.out.print("Enter string: ");
         String input = scanner.nextLine();
 
-        String cleanInput = input.replaceAll("\\s+", "").toLowerCase();
 
-        boolean isPalindrome = check(cleanInput, 0, cleanInput.length() - 1);
+        String normalized = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
 
-        if (isPalindrome) {
-            System.out.println("\"" + input + "\" is a palindrome.");
+        boolean isPalindrome = true;
+
+        for (int i = 0; i < normalized.length() / 2; i++) {
+            if (normalized.charAt(i) != normalized.charAt(normalized.length() - 1 - i)) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        if (isPalindrome && !normalized.isEmpty()) {
+            System.out.println("Result: \"" + input + "\" is a valid normalized palindrome.");
         } else {
-            System.out.println("\"" + input + "\" is NOT a palindrome.");
+            System.out.println("Result: \"" + input + "\" is NOT a palindrome.");
         }
 
         scanner.close();
-    }
-
-
-    private static boolean check(String s, int start, int end) {
-        if (start >= end) {
-            return true;
-        }
-
-        if (s.charAt(start) != s.charAt(end)) {
-            return false;
-        }
-
-        return check(s, start + 1, end - 1);
     }
 }
